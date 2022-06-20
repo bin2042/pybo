@@ -15,7 +15,10 @@ def index(request):
     kw = request.GET.get('kw', '')          # 검색어
     so = request.GET.get('so', 'recent')    # 정렬 기준
 
-    # 정렬
+    category_list = Category.objects.all()
+    category = get_object_or_404(Category, name=category_name)
+    question_list = Question.objects.filter(category=category)
+    
     # 정렬
     if so == 'recommend':
         question_list = Question.objects.annotate(
@@ -39,7 +42,8 @@ def index(request):
     paginator = Paginator(question_list, 10)  # 페이지 당 10개씩 보여 주기
     page_obj = paginator.get_page(page)
 
-    context = {'question_list': page_obj, 'page': page, 'kw': kw}
+    context = {'question_list': page_obj, 'page': page, 'kw': kw, 'so': so,
+               'category_list': category_list, 'category': category}
     return render(request, 'pybo/question_list.html', context)
 
 def detail(request, question_id):
