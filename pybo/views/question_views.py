@@ -22,7 +22,7 @@ def question_create(request):
             return redirect('pybo:index')
     else:
         form = QuestionForm()
-    context = {'form': form}
+    context = {'form': form, 'category': question.category}
     return render(request, 'pybo/question_form.html', context)
 
 @login_required(login_url='common:login')
