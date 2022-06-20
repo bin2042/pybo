@@ -11,6 +11,7 @@ def question_create(request):
     """
     pybo 질문 등록
     """
+    category = Category.objects.get(name=category_name)
     if request.method == 'POST':
         form = QuestionForm(request.POST)
         if form.is_valid():
@@ -44,7 +45,7 @@ def question_modify(request, question_id):
             return redirect('pybo:detail', question_id=question.id)
     else:
         form = QuestionForm(instance=question)
-    context = {'form': form}
+    context = {'form': form, 'category': question.category}
     return render(request, 'pybo/question_form.html', context)
 
 @login_required(login_url='common:login')
